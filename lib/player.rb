@@ -1,9 +1,8 @@
-require_relative "board.rb"
+
 
 class Player
   attr_reader :guess_array
   def initialize
-  #something something
   @guess_array = [] #stores each round of values inputted by player 2d array
   end
 
@@ -21,7 +20,7 @@ class Player
     @new_guess_array.map!(&:to_i)
     return @new_guess_array
   end
-  
+
   def convert_to_colours(new_guess_array, colours)
     new_row = []
     new_guess_array.each do |num|

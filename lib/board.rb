@@ -1,5 +1,5 @@
 class Board
-  attr_reader :colours # allows colours to be accessed in other classes (getter methods)
+  attr_reader :colours, :board_array # allows colours to be accessed in other classes (getter methods)
 
   def initialize
     @magenta = "M"
@@ -23,18 +23,17 @@ class Board
   end
 
 #temp until I make the real one
-  def make_empty_board
-    
-    blank_board_row = ['o', 'o', 'o', 'o', 'O', 'O', 'O', 'O']
-    @board_array = []
-    12.times do
-      @board_array << blank_board_row
+def make_empty_board
+  @board_array = Array.new(12) { ['o', 'o', 'o', 'o', 'O', 'O', 'O', 'O'].dup } # Added .dup
+  return @board_array
+end
+
+  
+  def update_board_array(guess_row, row_number) # Add row_number parameter
+    if guess_row
+      @board_array[row_number][4..7] = guess_row
     end
-    return @board_array
-    # empty_row = "o-o-o-o||O-O-O-O||"
-    # empty_board = 12.times do |i|
-    #   puts empty_row
-    # end
+    print_updated_board
   end
 
   def print_updated_board
@@ -44,7 +43,7 @@ class Board
     #puts each row of the 2d array:
     #||w-o-o-o||B-M-B-P||
     #||r-w-o-o||M-Y-C-C||
-    puts " Hints || Board ||"
+    puts "|| Hints || Board ||"
     board = @board_array.each_with_index do |row, row_index|
       row.each_with_index do |cell, cell_index|
         if cell_index % 4 == 0
