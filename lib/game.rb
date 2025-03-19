@@ -21,6 +21,17 @@ class Game
     @secret_hash
   end
 
+  def check_for_win(colour_guess)
+    secret_values = @secret_hash.values
+    if secret_values == colour_guess
+      @turn_count = 12
+      puts "You Win!"
+    end
+  end
+
+  def check_for_hints
+  end
+
   def play_turn
     guess = @player.get_guess
     colour_guess = @player.convert_to_colours(guess, @board.colours)
@@ -30,6 +41,9 @@ class Game
         @board.update_board_array(@player.guess_array[@turn_count], @turn_count)
         @turn_count += 1
       end
+      check_for_win(colour_guess)
+      #check for win condition here. 
+      #if not a win update hints
     end
   end
 
