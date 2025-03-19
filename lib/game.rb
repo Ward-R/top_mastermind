@@ -1,11 +1,11 @@
 require_relative "board.rb"
-
+require_relative "player.rb"
 
 class Game
-  attr_reader :secret_hash
-  def initialize(board)
-    @board = board # This stores the board passed from Board.rb to main.rb to here.
-
+  attr_reader :secret_hash, :board, :player
+  def initialize
+    @board = Board.new # This stores the board passed from Board.rb to main.rb to here.
+    @player = Player.new
   end
   
   def random_number
