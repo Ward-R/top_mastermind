@@ -29,8 +29,9 @@ def make_empty_board
 end
 
   
-  def update_board_array(guess_row, row_number) # Add row_number parameter
+  def update_board_array(guess_row, row_number, hint_array) # Add row_number parameter
     if guess_row
+      @board_array[row_number][0..4] = hint_array
       @board_array[row_number][4..7] = guess_row
     end
     print_updated_board
