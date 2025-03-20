@@ -1,4 +1,4 @@
 require_relative 'lib/game'
 
 game = Game.new
-game.play_round()
+game.play_round
