@@ -8,7 +8,7 @@ class Guess
   #get user input and store as guess
   def get_guess
     @guess_code = []
-    print "Enter four single digit numbers (e.g., 1123): "
+    print "Enter four single digit numbers between 1-6 (e.g., 1123):" # should add data entry validation
     input = gets.chomp
     guess_code = @guess_code
     @guess_code = input.split("")
