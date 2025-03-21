@@ -1,15 +1,18 @@
 require_relative 'code'
 require_relative 'guess'
+require_relative 'computer_ai'
 
 class Game
-  
+  attr_reader :turn_count, :red_hint_count, :white_hint_count
+
   def initialize
     @code = Code.new
-    @secret_code = @code.secret_code
+    @computer_ai = Computer_ai.new(self)
     @guess = Guess.new
     @turn_count = 0
     @red_hint_count = 0
     @white_hint_count = 0
+    @player_guesser = nil
   end
   
   def check_for_win
@@ -58,27 +61,64 @@ class Game
     @guess.all_guesses[@turn_count] = guess_with_hints # Replace the old array
   end
 
+  def role_choice
+    puts "Do you want to be the guesser or the code maker? The computer will play the other role."
+    puts "Enter 1 for guesser, 2 for code maker."
+    choice = gets.chomp.to_i
+    if choice == 1
+      @player_guesser = true
+      @secret_code = @code.secret_code
+    elsif choice == 2
+      @player_guesser = false
+      @secret_code = @code.player_secret_code
+    end
+    return @player_guesser
+  end
+
   def play_round
     # game logic that uses code and guess objects
     # get secret code (done in init i think)
     # print "Secret code for debugging: #{@secret_code}\n" #debugging
+    role_choice
     while @turn_count < 12
-      # game logic
-      @turn_guess = @guess.get_guess # I don't thnk this does anything useful now.
-      check_for_hint
-      @guess.all_guesses.each do |row|
-        row.each {|cell| print cell}
-        print "\n"
+      if @player_guesser == true
+        # game logic
+        @turn_guess = @guess.get_guess # I don't thnk this does anything useful now.
+        check_for_hint
+        @guess.all_guesses.each do |row|
+          row.each {|cell| print cell}
+          print "\n"
+        end
+        check_for_win
+        puts ""
+        @turn_count += 1
+        
+        # if 12 rounds and no correct guess, display you lose!
+        if @turn_count == 12
+          puts "Secret number was #{@secret_code}"
+          puts "You Lose! Loser! Go touch grass!"
+        end
+
+      elsif @player_guesser == false # computer is guesser
+        # automated computer logic
+        @turn_guess = @computer_ai.computer_guess
+        puts "Computer guess is #{@turn_guess}"
+        check_for_hint
+        @guess.all_guesses.each do |row|
+          row.each {|cell| print cell}
+          print "\n"
+        end
+        check_for_win
+        puts ""
+        @turn_count += 1
+        sleep(1)
+        
+        # if 12 rounds and no correct guess, display you lose!
+        if @turn_count == 12
+          puts "Secret number was #{@secret_code}"
+          puts "You Lose! Loser! Go touch grass!"
+        end
       end
-      check_for_win
-      puts ""
-      @turn_count += 1
     end
-    # if 12 rounds and no correct guess, display you lose!
-    if @turn_count == 12
-      puts "Secret number was #{@secret_code}"
-      puts "You Lose! Loser! Go touch grass!"
-    end
-   
   end
 end
