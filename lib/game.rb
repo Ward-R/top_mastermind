@@ -30,9 +30,7 @@ class Game
     secret_code_copy = @secret_code.dup # make temp copy
     # Check if correct number in correct spot
    
-    # Ai assisted with this code block. couldn't figure it out. ;;
-
-      # Check for "b" hints
+      # Check for "R" hints (correct digit, correct spot)
     turn_guess_copy.each_with_index do |guess_value, guess_index|
       if guess_value == secret_code_copy[guess_index]
         @red_hint_count += 1
@@ -41,7 +39,7 @@ class Game
       end
     end
 
-    # Check for "w" hints
+    # Check for "W" hints (correct digit, wrong spot)
     turn_guess_copy.each_with_index do |guess_value, guess_index|
       if guess_value != nil
         secret_code_copy.each_with_index do |secret_value, secret_index|
@@ -63,28 +61,33 @@ class Game
   end
 
   def role_choice
-    puts "Do you want to be the guesser or the code maker? The computer will play the other role."
-    puts "Enter 1 for guesser, 2 for code maker."
-    choice = gets.chomp.to_i
-    if choice == 1
-      @player_guesser = true
-      @secret_code = @code.secret_code
-    elsif choice == 2
-      @player_guesser = false
-      @secret_code = @code.player_secret_code
+    loop do
+      puts "Do you want to be the guesser or the code maker? The computer will play the other role."
+      puts "Enter 1 for guesser, 2 for code maker."
+      choice = gets.chomp
+      if choice =~ /^[1-2]{1}$/ # Check if the input is 4 digits between 1-6
+        if choice == "1"
+          @player_guesser = true
+          @secret_code = @code.secret_code
+          break
+        elsif choice == "2"
+          @player_guesser = false
+          @secret_code = @code.player_secret_code
+          break
+        end
+      else
+        puts "Error: Please enter exactly 1 or 2"
+      end
     end
     return @player_guesser
   end
 
   def play_round
-    # game logic that uses code and guess objects
-    # get secret code (done in init i think)
-    # print "Secret code for debugging: #{@secret_code}\n" #debugging
     role_choice
     while @turn_count < 12
       if @player_guesser == true
         # game logic
-        @turn_guess = @guess.get_guess # I don't thnk this does anything useful now.
+        @turn_guess = @guess.get_guess 
         check_for_hint
         @guess.all_guesses.each do |row|
           row.each {|cell| print cell}
@@ -93,7 +96,6 @@ class Game
         check_for_win
         puts ""
         @turn_count += 1
-        
         # if 12 rounds and no correct guess, display you lose!
         if @turn_count == 12
           puts "Secret number was #{@secret_code}"
@@ -117,7 +119,7 @@ class Game
         # if 12 rounds and no correct guess, display you lose!
         if @turn_count == 12
           puts "Secret number was #{@secret_code}"
-          puts "You Lose! Loser! Go touch grass!"
+          puts "Computer dumb, couldn't guess in time!"
         end
       end
     end

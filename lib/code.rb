@@ -13,12 +13,11 @@ class Code
     return secret_code
   end
 
-  def player_secret_code #haven't tested this yet
+  def player_secret_code 
     secret_code = []
     print "Enter secret code consisting of four single digit numbers between 1-6 (e.g., 1123):" # should add data entry validation
     input = gets.chomp
     secret_code = input.split("")
-    #guess_array <= get_input
     if secret_code.length != 4
       puts "Error: Please enter exactly four values."
       return nil
