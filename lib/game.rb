@@ -7,8 +7,9 @@ class Game
 
   def initialize
     @code = Code.new
-    @computer_ai = Computer_ai.new(self)
+    
     @guess = Guess.new
+    @computer_ai = Computer_ai.new(self, @guess)
     @turn_count = 0
     @red_hint_count = 0
     @white_hint_count = 0
